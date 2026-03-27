@@ -1,0 +1,367 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #fff;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "KINK";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.03;
+    font-size: 20rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo e glitch effect - Estilo rebelde */
+.logo {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.glitch {
+    font-size: 6rem;
+    font-weight: 900;
+    position: relative;
+    text-shadow: 0.05em 0 0 rgba(255,0,0,0.75), -0.05em -0.025em 0 rgba(0,255,0,0.75);
+    animation: glitch 0.3s infinite;
+    letter-spacing: -2px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+}
+
+@keyframes glitch {
+    0% { transform: skew(0deg, 0deg); }
+    25% { transform: skew(2deg, 1deg); text-shadow: 0.05em 0 0 rgba(255,0,0,0.75); }
+    50% { transform: skew(-1deg, -2deg); text-shadow: -0.05em -0.025em 0 rgba(0,255,0,0.75); }
+    75% { transform: skew(1deg, 2deg); text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.75); }
+    100% { transform: skew(0deg, 0deg); }
+}
+
+.tagline {
+    font-size: 1.5rem;
+    opacity: 0.9;
+    margin-top: -0.5rem;
+    font-style: italic;
+    color: #ff6b6b;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    letter-spacing: 2px;
+}
+
+/* Cards com estilo rebelde */
+.main-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,107,107,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.card-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: #ff6b6b;
+}
+
+.card p {
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+/* Buttons com estilo único */
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.btn:active::after {
+    width: 100%;
+    height: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a5a);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+    color: white;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #ff6b6b;
+    color: #ff6b6b;
+}
+
+.btn-outline:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
+.btn-google {
+    background: #db4437;
+    color: white;
+}
+
+/* Join form */
+.join-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.join-form input {
+    padding: 0.8rem;
+    border: none;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    background: rgba(255,255,255,0.9);
+    color: #1a1a2e;
+}
+
+.join-form input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #ff6b6b;
+}
+
+/* Features */
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.feature span {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.feature h3 {
+    margin-bottom: 0.5rem;
+    color: #4ecdc4;
+}
+
+.feature p {
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Rebellion badge */
+.rebellion-badge {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1e2a3a, #0f172a);
+    color: white;
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    border: 1px solid rgba(255,107,107,0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #ff6b6b;
+}
+
+.close:hover {
+    color: white;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.modal input {
+    padding: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+.modal input:focus {
+    outline: none;
+    border-color: #ff6b6b;
+}
+
+.modal input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+.modal a {
+    color: #ff6b6b;
+    text-decoration: none;
+}
+
+.modal a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .features {
+        grid-template-columns: 1fr;
+    }
+    
+    .glitch {
+        font-size: 3rem;
+    }
+    
+    .tagline {
+        font-size: 1rem;
+    }
+}

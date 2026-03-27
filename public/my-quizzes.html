@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Quizzes - KINK is not Kahoot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2 class="glitch-mini">KINK</h2>
+                <span>is not Kahoot</span>
+            </div>
+            <div class="nav-menu">
+                <a href="my-quizzes.html" class="nav-link active">Meus Quizzes</a>
+                <a href="create-quiz.html" class="nav-link">Criar Quiz</a>
+                <button id="logoutBtn" class="btn-logout">Sair</button>
+            </div>
+            <div class="user-info">
+                <span id="userName" style="display: none;"></span>
+                <div class="user-avatar" style="display: none;"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Meus Quizzes</h1>
+            <p>Gerencie todos os seus quizzes criados</p>
+            <button id="createNewQuiz" class="btn btn-primary">+ Criar Novo Quiz</button>
+        </div>
+
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <h3 id="totalQuizzes">0</h3>
+                    <p>Total de Quizzes</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-info">
+                    <h3 id="totalQuestions">0</h3>
+                    <p>Perguntas no Total</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3 id="totalPlays">0</h3>
+                    <p>Vezes Jogado</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="quizzes-grid" id="quizzesGrid">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Carregando seus quizzes...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirmar Ação</h2>
+            <p id="confirmMessage"></p>
+            <div class="modal-buttons">
+                <button id="confirmYes" class="btn btn-danger">Sim</button>
+                <button id="confirmNo" class="btn btn-outline">Não</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição Rápida -->
+    <div id="editModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close">&times;</span>
+            <h2>Editar Quiz</h2>
+            <form id="editQuizForm">
+                <input type="text" id="editTitle" placeholder="Título do Quiz" required>
+                <textarea id="editDescription" placeholder="Descrição do Quiz" rows="3"></textarea>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="editRandomize"> Randomizar ordem das perguntas
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/quiz-manager.js"></script>
+</body>
+</html>

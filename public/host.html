@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Professor - KINK is not Kahoot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2 class="glitch-mini">KINK</h2>
+                <span>is not Kahoot</span>
+            </div>
+            <div class="nav-menu">
+                <a href="my-quizzes.html" class="nav-link">Meus Quizzes</a>
+                <a href="create-quiz.html" class="nav-link">Criar Quiz</a>
+                <button id="logoutBtn" class="btn-logout">Sair</button>
+            </div>
+            <div class="user-info">
+                <span id="userName" style="display: none;"></span>
+                <div class="user-avatar" style="display: none;"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container host-container">
+        <div class="host-header">
+            <h1>🎮 Painel do Professor</h1>
+            <div id="quizInfo" class="quiz-info-badge"></div>
+        </div>
+
+        <div class="host-layout">
+            <!-- Coluna Esquerda - Controles -->
+            <div class="host-controls">
+                <div class="control-card">
+                    <h3>Código da Sala</h3>
+                    <div class="room-code-display">
+                        <span id="roomCode">XXXXXX</span>
+                        <button id="copyCodeBtn" class="btn-icon">📋</button>
+                    </div>
+                    <button id="shareRoomBtn" class="btn btn-outline btn-small">Compartilhar Link</button>
+                </div>
+
+                <div class="control-card">
+                    <h3>Controles do Jogo</h3>
+                    <div class="game-controls">
+                        <button id="startGameBtn" class="btn btn-success btn-large">🚀 Iniciar Quiz</button>
+                        <div id="questionControls" style="display: none;">
+                            <button id="startQuestionBtn" class="btn btn-primary">📢 Iniciar Pergunta</button>
+                            <button id="nextQuestionBtn" class="btn btn-primary" style="display: none;">⏩ Próxima Pergunta</button>
+                            <button id="endGameBtn" class="btn btn-danger">🏁 Encerrar Quiz</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-card">
+                    <h3>Pergunta Atual</h3>
+                    <div id="currentQuestionDisplay">
+                        <p class="placeholder">Nenhuma pergunta ativa</p>
+                    </div>
+                    <div id="questionTimer" class="timer-display" style="display: none;">
+                        <div class="timer-bar"></div>
+                        <span id="timerSeconds">0</span>s
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna Direita - Status e Ranking -->
+            <div class="host-status">
+                <div class="status-card">
+                    <h3>👥 Jogadores Conectados</h3>
+                    <div id="playersList" class="players-list">
+                        <p class="placeholder">Aguardando jogadores...</p>
+                    </div>
+                    <div class="players-count">
+                        Total: <span id="playersCount">0</span>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <h3>🏆 Ranking Atual</h3>
+                    <div id="rankingList" class="ranking-list">
+                        <p class="placeholder">Aguardando respostas...</p>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <h3>📊 Estatísticas da Rodada</h3>
+                    <div id="roundStats">
+                        <div class="stat-item">
+                            <span>Respostas:</span>
+                            <span id="answersCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Taxa de Acerto:</span>
+                            <span id="accuracyRate">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Quiz -->
+    <div id="selectQuizModal" class="modal">
+        <div class="modal-content">
+            <h2>Selecionar Quiz</h2>
+            <p>Escolha qual quiz você quer jogar</p>
+            <div id="quizzesList" class="quizzes-select-list"></div>
+            <button id="cancelSelectQuiz" class="btn btn-outline">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/host.js"></script>
+</body>
+</html>
