@@ -2,7 +2,7 @@
 
 *The rebellious quiz platform that breaks all the rules*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
@@ -217,7 +217,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull r
 
 📄 Licença
 
-Distribuído sob a licença MIT. Veja LICENSE para mais informações.
+Distribuído sob a licença GNU General Public License v3.0. Veja o arquivo LICENSE para mais informações.
 📬 Contato
 
     Autor: Vinicius Mercês Silva
