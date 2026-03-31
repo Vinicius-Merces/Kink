@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KINK is not Kahoot - Sistema de Quiz Interativo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Loading overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        .loading-content {
+            text-align: center;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-content p {
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Carregando KINK...</p>
+        </div>
+    </div>
+
+    <div class="container" style="display: none;">
+        <div class="hero-section">
+            <div class="logo">
+                <h1 class="glitch" data-text="KINK">KINK</h1>
+                <p class="tagline">is not Kahoot</p>
+                <p class="subtitle">The rebellious quiz platform</p>
+            </div>
+            
+            <div class="main-options">
+                <div class="card host-card">
+                    <div class="card-icon">🎮</div>
+                    <h2>Sou Professor</h2>
+                    <p>Crie quizzes sem limites, gerencie salas e desafie seus alunos</p>
+                    <button id="hostBtn" class="btn btn-primary">Criar Quiz</button>
+                    <button id="loginBtn" class="btn btn-google">🔐 Entrar com Google</button>
+                </div>
+                
+                <div class="card player-card">
+                    <div class="card-icon">👨‍🎓</div>
+                    <h2>Sou Aluno</h2>
+                    <p>Entre com o código da sala e participe do quiz</p>
+                    <div class="join-form">
+                        <input type="text" id="roomCode" placeholder="Código KINK" maxlength="6">
+                        <button id="joinBtn" class="btn btn-success">Entrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <span>⚡</span>
+                <h3>Tempo Real</h3>
+                <p>Respostas instantâneas e ranking ao vivo</p>
+            </div>
+            <div class="feature">
+                <span>🏆</span>
+                <h3>Competitivo</h3>
+                <p>Pontuação baseada em velocidade e acertos</p>
+            </div>
+            <div class="feature">
+                <span>🎨</span>
+                <h3>Sem Limites</h3>
+                <p>Crie quizzes com texto livre, sem restrições de caracteres</p>
+            </div>
+        </div>
+        
+        <div class="rebellion-badge">
+            <p>⚠️ KINK is not Kahoot - We do things differently ⚠️</p>
+        </div>
+    </div>
+    
+        <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Login no KINK</h2>
+            <p>Use sua conta Google para acessar o KINK</p>
+            <button id="googleLoginBtn" class="btn btn-google btn-large" style="width: 100%; margin-top: 1rem;">
+                🔐 Entrar com Google
+            </button>
+            <!-- DEBUG REMOVIDO - linha abaixo foi removida -->
+        </div>
+    </div>
+    
+    <!-- Carregar Firebase primeiro -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Depois carregar configuração -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    
+    <script>
+        // Aguardar o DOM e Firebase carregarem
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('=== INICIANDO KINK ===');
+            
+            // Aguardar Firebase inicializar
+            let attempts = 0;
+            const maxAttempts = 20;
+            
+            function waitForFirebase() {
+                return new Promise((resolve) => {
+                    const checkInterval = setInterval(() => {
+                        attempts++;
+                        if (typeof auth !== 'undefined' && auth) {
+                            clearInterval(checkInterval);
+                            resolve(true);
+                        } else if (attempts >= maxAttempts) {
+                            clearInterval(checkInterval);
+                            resolve(false);
+                        }
+                    }, 100);
+                });
+            }
+            
+            const firebaseLoaded = await waitForFirebase();
+            
+            if (firebaseLoaded) {
+                console.log('✅ Firebase carregado com sucesso!');
+                document.getElementById('loading-overlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    document.querySelector('.container').style.display = 'block';
+                }, 500);
+            } else {
+                console.error('❌ Firebase não carregou após 2 segundos');
+                document.getElementById('loading-overlay').innerHTML = `
+                    <div class="loading-content">
+                        <p style="color: #ff6b6b;">❌ Erro ao carregar Firebase</p>
+                        <p style="font-size: 12px;">Recarregue a página ou tente novamente mais tarde</p>
+                        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #ff6b6b; border: none; border-radius: 5px; cursor: pointer;">Recarregar</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Elementos
+            const loginModal = document.getElementById('loginModal');
+            const hostBtn = document.getElementById('hostBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            const joinBtn = document.getElementById('joinBtn');
+            const googleLoginBtn = document.getElementById('googleLoginBtn');
+            const debugDiv = document.getElementById('loginDebug');
+            
+            function showDebug(message) {
+                console.log('[DEBUG]', message);
+                if (debugDiv) {
+                    debugDiv.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+                }
+            }
+            
+            showDebug('Página carregada, Firebase OK');
+            
+            // Função de login com Google
+            async function loginWithGoogle() {
+                showDebug('Iniciando login com Google...');
+                
+                if (!auth) {
+                    showDebug('ERRO: Auth não está definido!');
+                    return;
+                }
+                
+                try {
+                    showDebug('Criando provider Google...');
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    provider.setCustomParameters({ prompt: 'select_account' });
+                    
+                    showDebug('Chamando signInWithPopup...');
+                    const result = await auth.signInWithPopup(provider);
+                    
+                    showDebug('✅ SUCESSO! Usuário logado: ' + result.user.displayName);
+                    
+                    if (typeof Utils !== 'undefined') {
+                        Utils.showToast(`Bem-vindo, ${result.user.displayName}!`, 'success');
+                    }
+                    
+                    loginModal.style.display = 'none';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'my-quizzes.html';
+                    }, 1000);
+                    
+                } catch (error) {
+                    showDebug('❌ ERRO: ' + error.code + ' - ' + error.message);
+                    console.error('Erro detalhado:', error);
+                    
+                    if (error.code === 'auth/popup-blocked') {
+                        alert('Pop-up bloqueado! Permita pop-ups para este site e tente novamente.');
+                    } else if (error.code === 'auth/unauthorized-domain') {
+                        alert('Domínio não autorizado. Contate o administrador.\nDomínio atual: ' + window.location.hostname);
+                    } else {
+                        alert('Erro: ' + error.message);
+                    }
+                }
+            }
+            
+            // Abrir modal
+            function openLoginModal() {
+                showDebug('Abrindo modal de login');
+                loginModal.style.display = 'block';
+            }
+            
+            // Event Listeners
+            if (hostBtn) {
+                hostBtn.addEventListener('click', () => {
+                    showDebug('Botão "Criar Quiz" clicado');
+                    const user = auth.currentUser;
+                    if (user) {
+                        showDebug('Usuário já logado: ' + user.displayName);
+                        window.location.href = 'my-quizzes.html';
+                    } else {
+                        showDebug('Usuário não logado, abrindo modal');
+                        openLoginModal();
+                    }
+                });
+            }
+            
+            if (loginBtn) {
+                loginBtn.addEventListener('click', () => {
+                    showDebug('Botão "Entrar com Google" (card) clicado');
+                    openLoginModal();
+                });
+            }
+            
+            if (googleLoginBtn) {
+                googleLoginBtn.addEventListener('click', () => {
+                    showDebug('Botão "Entrar com Google" (modal) clicado');
+                    loginWithGoogle();
+                });
+            }
+            
+            if (joinBtn) {
+                joinBtn.addEventListener('click', () => {
+                    const code = document.getElementById('roomCode').value.toUpperCase();
+                    showDebug(`Código da sala: ${code}`);
+                    if (code && code.length === 6) {
+                        window.location.href = `player.html?code=${code}`;
+                    } else {
+                        if (typeof Utils !== 'undefined') {
+                            Utils.showToast('Por favor, insira um código válido de 6 caracteres', 'warning');
+                        } else {
+                            alert('Por favor, insira um código válido de 6 caracteres');
+                        }
+                    }
+                });
+            }
+            
+            // Fechar modal
+            const closeBtns = document.querySelectorAll('.close');
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const modal = btn.closest('.modal');
+                    if (modal) modal.style.display = 'none';
+                    showDebug('Modal fechado');
+                });
+            });
+            
+            window.onclick = function(event) {
+                if (event.target === loginModal) {
+                    loginModal.style.display = 'none';
+                    showDebug('Modal fechado (clique fora)');
+                }
+            };
+            
+            // Verificar estado de autenticação
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    showDebug(`👤 Usuário logado: ${user.displayName} (${user.email})`);
+                } else {
+                    showDebug('👤 Nenhum usuário logado');
+                }
+            });
+            
+            showDebug('✅ KINK pronto! Aguardando interação...');
+        });
+    </script>
+
+        <!-- Music Player -->
+    <link rel="stylesheet" href="css/player.css">
+    <script src="js/music-player.js"></script>
+    
+</body>
+</html>

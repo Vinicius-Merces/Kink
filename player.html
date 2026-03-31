@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KINK Player - Entre no Jogo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="player-body">
+    <div class="player-container">
+
+        <!-- Tela de Entrada -->
+        <div id="joinScreen" class="player-screen active">
+            <div class="player-logo">
+                <h1 class="glitch-mini">KINK</h1>
+                <p>is not Kahoot</p>
+            </div>
+            
+            <div class="join-card">
+                <h2>Entre na Sala</h2>
+                <div class="code-input-group">
+                    <input type="text" id="roomCodeInput" placeholder="Código da Sala" maxlength="6" autocomplete="off">
+                    <button id="checkRoomBtn" class="btn btn-primary">Verificar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Perfil -->
+        <div id="profileScreen" class="player-screen">
+            <div class="profile-card">
+                <h2>Escolha seu Perfil</h2>
+                
+                <div class="avatar-selector">
+                    <h3>Escolha seu Avatar</h3>
+                    <div class="avatars-grid" id="avatarsGrid"></div>
+                </div>
+                
+                <div class="nickname-input">
+                    <h3>Seu Nome</h3>
+                    <input type="text" id="playerName" placeholder="Digite seu nome" maxlength="20" autocomplete="off">
+                </div>
+                
+                <button id="joinGameBtn" class="btn btn-success btn-large">Entrar no Jogo!</button>
+            </div>
+        </div>
+
+        <!-- Tela de Espera -->
+        <div id="waitingScreen" class="player-screen">
+            <div class="waiting-card">
+                <div class="waiting-animation">
+                    <div class="pulse"></div>
+                </div>
+                <h2>Aguardando o Professor</h2>
+                <p>O jogo vai começar em breve...</p>
+                <div class="room-info">
+                    <span>Sala: <strong id="waitingRoomCode"></strong></span>
+                </div>
+                <div class="players-waiting">
+                    <h3>Jogadores na Sala:</h3>
+                    <div id="waitingPlayersList" class="players-list-mini"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Pergunta -->
+        <div id="questionScreen" class="player-screen">
+            <div class="question-container">
+                <div class="question-header">
+                    <div class="question-timer">
+                        <div class="timer-circle" id="timerCircle">
+                            <span id="timerValue">30</span>
+                        </div>
+                    </div>
+                    <div class="score-display">
+                        Pontuação: <span id="currentScore">0</span>
+                    </div>
+                </div>
+                
+                <div class="question-card">
+                    <h2 id="questionText">Carregando pergunta...</h2>
+                </div>
+                
+                <div class="options-grid" id="optionsGrid"></div>
+                
+                <div class="feedback-message" id="feedbackMessage"></div>
+            </div>
+        </div>
+
+        <!-- Tela de Leitura (5 segundos) - ADICIONADA -->
+        <div id="readingScreen" class="player-screen">
+            <div class="reading-card">
+                <h2>📖 Leia atentamente</h2>
+                <div class="question-reading">
+                    <p id="readingQuestionText" style="font-size: 1.35rem; line-height: 1.4;"></p>
+                </div>
+                <div class="reading-timer">
+                    <div class="timer-circle">
+                        <span id="readingTimer">5</span>
+                    </div>
+                    <p>segundos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Loading - ADICIONADA -->
+        <div id="loadingScreen" class="player-screen">
+            <div class="loading-card">
+                <h2>🔄 Carregando Quiz...</h2>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <p>Preparando perguntas...</p>
+                <div class="loading-timer">
+                    <span id="loadingTimer">5</span>s
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Ranking Parcial - ADICIONADA -->
+        <div id="rankingScreen" class="player-screen">
+            <div class="ranking-card">
+                <h2>🏆 Ranking Parcial 🏆</h2>
+                <div id="rankingListModal" class="ranking-list-modal"></div>
+                <div id="answerFeedback" class="feedback-message" style="margin-top: 1.5rem; display: none;"></div>
+                <p style="margin-top: 2rem; opacity: 0.8; text-align:center;">Aguardando o professor...</p>
+            </div>
+        </div>
+
+        <!-- Tela de Resultado (entre perguntas) -->
+        <div id="resultScreen" class="player-screen">
+            <div class="result-card">
+                <div class="result-icon" id="resultIcon">❓</div>
+                <h2 id="resultText">Aguardando...</h2>
+                <div class="points-earned" id="pointsEarned"></div>
+                <div class="correct-answer" id="correctAnswer"></div>
+                <div class="next-question-timer">
+                    Próxima pergunta em: <span id="nextTimer">5</span>s
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Fim de Jogo -->
+        <div id="finalScreen" class="player-screen">
+            <div class="final-card">
+                <h2>🏆 Fim de Jogo! 🏆</h2>
+                <div class="final-ranking">
+                    <h3>Ranking Final</h3>
+                    <div id="finalRankingList" class="ranking-list-large"></div>
+                </div>
+                <button id="exitGameBtn" class="btn btn-primary">Sair</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/player.js"></script>
+
+    <!-- Music Player -->
+    <link rel="stylesheet" href="css/player.css">
+    <script src="js/music-player.js"></script>
+
+</body>
+</html>
